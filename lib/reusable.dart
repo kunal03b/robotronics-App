@@ -45,8 +45,7 @@ class WhiteRadioListTile<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(
-        unselectedWidgetColor:
-            Colors.white, // Set the unselected color to white
+        unselectedWidgetColor: Colors.white,
       ),
       child: RadioListTile<T>(
         value: value,
@@ -55,7 +54,7 @@ class WhiteRadioListTile<T> extends StatelessWidget {
         activeColor: Colors.white,
         title: Text(
           title,
-          style: TextStyle(color: Colors.white), // Set the text color to white
+          style: TextStyle(color: Colors.white),
         ),
         controlAffinity: ListTileControlAffinity.leading,
       ),
