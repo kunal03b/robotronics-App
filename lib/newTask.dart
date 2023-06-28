@@ -16,6 +16,8 @@ class newTask extends StatelessWidget {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double avatarRadius = screenWidth * 0.05;
     final double appBarIconSize = screenWidth * 0.13;
+    String cdate = DateFormat("yyyy-MM-dd").format(DateTime.now());
+    print(cdate);
 
     return Scaffold(
       backgroundColor: Constants().buttonBackground,
@@ -176,7 +178,7 @@ class newTask extends StatelessWidget {
                         'title': titleController.text,
                         'description': descriptionController.text,
                         'deadline': selectedDate,
-                        'assignedDate': Timestamp.now(),
+                        'assignedDate': cdate,
                       };
 
                       taskRef.set(taskData).then((value) {
