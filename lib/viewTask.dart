@@ -17,7 +17,7 @@ class ViewTask extends StatelessWidget {
     final double appBarIconSize = screenWidth * 0.13;
 
     CollectionReference tasksCollection =
-        FirebaseFirestore.instance.collection('tasks');
+        FirebaseFirestore.instance.collection('task');
 
     return FutureBuilder<DocumentSnapshot>(
       future: tasksCollection.doc(taskId).get(),
@@ -34,95 +34,143 @@ class ViewTask extends StatelessWidget {
         var taskData = snapshot.data!.data() as Map<String, dynamic>;
         String title = taskData['title'];
         String description = taskData['description'];
+        String category = taskData['category'];
         String deadline = taskData['deadline'];
+        String assignedDate = taskData['assignedDate'];
 
         return Scaffold(
           appBar: appBarMethod(screenHeight, appBarIconSize, avatarRadius),
           backgroundColor: Constants().buttonBackground,
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 11.0, top: 13),
-                child: Text(
-                  title,
-                  style: TextStyle(
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 11.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Constants().textColor,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Divider(
+                    thickness: 1.2,
                     color: Constants().textColor,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                    indent: screenWidth * 0.025,
+                    endIndent: screenWidth * 0.025,
                   ),
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.01),
-              Divider(
-                thickness: 1.2,
-                color: Constants().textColor,
-                indent: screenWidth * 0.025,
-                endIndent: screenWidth * 0.025,
-              ),
-              SizedBox(height: screenHeight * 0.01),
-              Padding(
-                padding: const EdgeInsets.only(left: 11.0, right: 11.0),
-                child: Text(
-                  description,
-                  style: TextStyle(color: Constants().textColor, fontSize: 16),
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.5,
-              ),
-              Center(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TaskManagerScreen()),
-                    );
-                  },
-                  child: Container(
-                    height: screenHeight * 0.058,
-                    width: screenWidth * 0.6,
+                  SizedBox(height: screenHeight * 0.01),
+                  Text(
+                    description,
+                    style:
+                        TextStyle(color: Constants().textColor, fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.042,
+                  ),
+                  Container(
+                    height: screenHeight * 0.033,
+                    width: screenWidth * 0.29,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(120),
-                      border:
-                          Border.all(color: Constants().textColor, width: 2),
-                    ),
-                    // child: Center(
-                    //     child: Text(
-                    //   'OK',
-                    //   style: TextStyle(color: Constants().textColor, fontSize: 22),
-                    // )),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.025,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 11.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Deadline-',
-                      style: TextStyle(
-                        color: Constants().textColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      border: Border.all(
+                        color: Colors.white,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 7),
+                    child: Center(
                       child: Text(
-                        deadline,
+                        category,
                         style: TextStyle(
-                            color: Constants().textColor, fontSize: 16),
+                            color: Colors.white, fontWeight: FontWeight.w400),
                       ),
-                    )
-                  ],
-                ),
-              )
-            ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.5,
+                  ),
+                  Center(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TaskManagerScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: screenHeight * 0.058,
+                        width: screenWidth * 0.6,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(120),
+                          border: Border.all(
+                            color: Constants().textColor,
+                            width: 2,
+                          ),
+                        ),
+                        // child: Center(
+                        //     child: Text(
+                        //   'OK',
+                        //   style: TextStyle(color: Constants().textColor, fontSize: 22),
+                        // )),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.025,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Deadline: ',
+                        style: TextStyle(
+                          color: Constants().textColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 7),
+                        child: Text(
+                          deadline,
+                          style: TextStyle(
+                            color: Constants().textColor,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 11.0),
+                  //   child:
+                  Row(
+                    children: [
+                      Text(
+                        'Assigned Date: ',
+                        style: TextStyle(
+                          color: Constants().textColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 7),
+                        child: Text(
+                          assignedDate,
+                          style: TextStyle(
+                            color: Constants().textColor,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },

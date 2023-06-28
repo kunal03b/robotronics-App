@@ -27,16 +27,16 @@ class TaskCardWidget extends StatelessWidget {
     final String formattedDate = currentDate.toString();
 
     // Update the assigned date in Firestore
-    FirebaseFirestore.instance
-        .collection('task')
-        .doc(task.id)
-        .update({'assignedDate': formattedDate}).then((value) {
-      // Update successful
-      print('Assigned date updated successfully');
-    }).catchError((error) {
-      // Handle update error
-      print('Failed to update assigned date: $error');
-    });
+    // FirebaseFirestore.instance
+    //     .collection('task')
+    //     .doc(task.id)
+    //     .update({'assignedDate': formattedDate}).then((value) {
+    //   // Update successful
+    //   print('Assigned date updated successfully');
+    // }).catchError((error) {
+    //   // Handle update error
+    //   print('Failed to update assigned date: $error');
+    // });
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
@@ -66,6 +66,7 @@ class TaskCardWidget extends StatelessWidget {
                 ),
                 subtitle: Text(
                   task['description'].toString(),
+                  maxLines: 2,
                   style: TextStyle(color: Colors.black),
                 ),
               ),
@@ -90,7 +91,7 @@ class TaskCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Assigned - $formattedDate', // Use the current date
+                        'Assigned - ${task['assignedDate'].toString()}', // Use the assigned date from the database
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

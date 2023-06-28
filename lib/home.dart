@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => newTask()));
+                        MaterialPageRoute(builder: (context) => NewTask()));
                     print('Hello from Add Task');
                   },
                   child: Text(

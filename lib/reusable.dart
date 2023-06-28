@@ -32,7 +32,7 @@ AppBar appBarMethod(
 
 class WhiteRadioListTile<T> extends StatelessWidget {
   final T value;
-  final T groupValue;
+  final T? groupValue;
   final ValueChanged<T?> onChanged;
   final String title;
 
