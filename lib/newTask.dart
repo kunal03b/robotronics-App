@@ -19,6 +19,23 @@ class newTask extends StatelessWidget {
     String cdate = DateFormat("yyyy-MM-dd").format(DateTime.now());
     print(cdate);
 
+    Future<void> addTask() {
+      CollectionReference taskCollection = firestore.collection('task');
+
+      Map<String, dynamic> taskData = {
+        'title': titleController.text,
+        'description': descriptionController.text,
+        'deadline': selectedDate,
+        'assignedDate': cdate,
+      };
+
+      return taskCollection.add(taskData).then((value) {
+        print('Task added successfully!');
+      }).catchError((error) {
+        print('Failed to add task: $error');
+      });
+    }
+
     return Scaffold(
       backgroundColor: Constants().buttonBackground,
       appBar: appBarMethod(screenHeight, appBarIconSize, avatarRadius),
@@ -170,23 +187,7 @@ class newTask extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 20.0, top: 40),
                   child: ElevatedButton(
-                    onPressed: () {
-                      DocumentReference taskRef =
-                          firestore.collection('task').doc();
-
-                      Map<String, dynamic> taskData = {
-                        'title': titleController.text,
-                        'description': descriptionController.text,
-                        'deadline': selectedDate,
-                        'assignedDate': cdate,
-                      };
-
-                      taskRef.set(taskData).then((value) {
-                        print('Task saved successfully!');
-                      }).catchError((error) {
-                        print('Failed to save task: $error');
-                      });
-                    },
+                    onPressed: addTask,
                     child: Text(
                       'Save',
                       style: TextStyle(color: Colors.black),
