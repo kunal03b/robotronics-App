@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:robotronics/constants.dart';
-import 'package:robotronics/main.dart';
 import 'package:robotronics/newTask.dart';
 import 'package:robotronics/reusable.dart';
+import 'package:robotronics/task%20Manager%20Screen/tasksScreen.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key});
@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => newtask()));
+                        MaterialPageRoute(builder: (context) => newTask()));
                     print('Hello from Add Task');
                   },
                   child: Text(

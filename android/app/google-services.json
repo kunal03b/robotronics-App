@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "61600133813",
+    "project_id": "finalapp-1be32",
+    "storage_bucket": "finalapp-1be32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61600133813:android:aefb4de0a658b042ac84fc",
+        "android_client_info": {
+          "package_name": "com.example.final_login"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61600133813-kuvcc3ankt1ns8126hmu7hh5tm746ult.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCNAf4fhf4igDyLdZ0tzjJF-L7ZCZ6mJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61600133813-kuvcc3ankt1ns8126hmu7hh5tm746ult.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61600133813:android:66dec11319d1f4e3ac84fc",
+        "android_client_info": {
+          "package_name": "com.example.robotronics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61600133813-kuvcc3ankt1ns8126hmu7hh5tm746ult.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCNAf4fhf4igDyLdZ0tzjJF-L7ZCZ6mJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61600133813-kuvcc3ankt1ns8126hmu7hh5tm746ult.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:robotronics/constants.dart';
 import 'package:robotronics/viewTask.dart';
@@ -8,6 +9,7 @@ class TaskCardWidget extends StatelessWidget {
   final double cardHeight;
   final double subtitleFontSize;
   final double screenHeight;
+  final QueryDocumentSnapshot<Object?> task;
 
   TaskCardWidget({
     required this.screenWidth,
@@ -15,10 +17,27 @@ class TaskCardWidget extends StatelessWidget {
     required this.cardHeight,
     required this.subtitleFontSize,
     required this.screenHeight,
+    required this.task,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Get the current date
+    final DateTime currentDate = DateTime.now();
+    final String formattedDate = currentDate.toString();
+
+    // Update the assigned date in Firestore
+    FirebaseFirestore.instance
+        .collection('task')
+        .doc(task.id)
+        .update({'assignedDate': formattedDate}).then((value) {
+      // Update successful
+      print('Assigned date updated successfully');
+    }).catchError((error) {
+      // Handle update error
+      print('Failed to update assigned date: $error');
+    });
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Card(
@@ -39,14 +58,14 @@ class TaskCardWidget extends StatelessWidget {
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(
-                  'CODE MANAGEMENT',
+                  task['title'].toString(),
                   style: TextStyle(
                     fontSize: subtitleFontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  'The refactoring of code for an upcoming workshop based on Bluetooth controlled car followed by a fun technical event.',
+                  task['description'].toString(),
                   style: TextStyle(color: Colors.black),
                 ),
               ),
@@ -71,7 +90,7 @@ class TaskCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Assigned - June 20, 2023',
+                        'Assigned - $formattedDate', // Use the current date
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -79,7 +98,7 @@ class TaskCardWidget extends StatelessWidget {
                       ),
                       SizedBox(height: screenHeight * 0.001),
                       Text(
-                        'Deadline - June 30, 2023',
+                        'Deadline - ${task['deadline'].toString()}',
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -89,9 +108,12 @@ class TaskCardWidget extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ViewTask()));
-                      print('Hi');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewTask(taskId: task.id),
+                        ),
+                      );
                     },
                     child: Container(
                       width: screenWidth / 3.5,
