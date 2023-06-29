@@ -72,7 +72,7 @@ class ViewTask extends StatelessWidget {
                     height: screenHeight * 0.042,
                   ),
                   Container(
-                    height: screenHeight * 0.033,
+                    height: screenHeight * 0.04,
                     width: screenWidth * 0.29,
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -87,19 +87,83 @@ class ViewTask extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  SizedBox(
+                    height: screenHeight * 0.02,
+                  ),
+
+                  Text(
+                    'Related Links and Documents:',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Constants().textColor),
+                  ),
+
+                  SizedBox(
+                    height: screenHeight * 0.03,
+                  ),
+
+                  Text(
+                    'Docs:',
+                    style: TextStyle(color: Constants().textColor),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.008,
+                  ),
+
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ViewTaskTile(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          imagePath: 'assets/repository.png',
+                          text: 'Repository',
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.037,
+                        ),
+                        ViewTaskTile(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          imagePath: 'assets/powerpoint.png',
+                          text: 'PowerPoint',
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.037,
+                        ),
+                        ViewTaskTile(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          imagePath: 'assets/word.png',
+                          text: 'Project Report',
+                          onTap: () {},
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.037,
+                        ),
+                        ViewTaskTile(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          imagePath: 'assets/ui.png',
+                          text: 'UI Design',
+                          onTap: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+
                   SizedBox(
                     height: screenHeight * 0.5,
                   ),
                   Center(
                     child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TaskManagerScreen(),
-                          ),
-                        );
-                      },
+                      onTap: () {},
                       child: Container(
                         height: screenHeight * 0.058,
                         width: screenWidth * 0.6,
@@ -107,14 +171,15 @@ class ViewTask extends StatelessWidget {
                           borderRadius: BorderRadius.circular(120),
                           border: Border.all(
                             color: Constants().textColor,
-                            width: 2,
+                            width: 1.5,
                           ),
                         ),
-                        // child: Center(
-                        //     child: Text(
-                        //   'OK',
-                        //   style: TextStyle(color: Constants().textColor, fontSize: 22),
-                        // )),
+                        child: Center(
+                            child: Text(
+                          'Chat Here',
+                          style: TextStyle(
+                              color: Constants().textColor, fontSize: 15),
+                        )),
                       ),
                     ),
                   ),
@@ -149,7 +214,7 @@ class ViewTask extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'Assigned Date: ',
+                        'Assigned: ',
                         style: TextStyle(
                           color: Constants().textColor,
                           fontSize: 16,

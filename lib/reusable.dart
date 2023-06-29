@@ -124,3 +124,51 @@ class dateWidget extends StatelessWidget {
     );
   }
 }
+
+class ViewTaskTile extends StatelessWidget {
+  final double screenHeight;
+  final double screenWidth;
+  final String imagePath;
+  final String text;
+  final VoidCallback onTap;
+
+  const ViewTaskTile({
+    required this.screenHeight,
+    required this.screenWidth,
+    required this.imagePath,
+    required this.text,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: screenHeight * 0.13,
+        width: screenWidth * 0.24,
+        decoration: BoxDecoration(
+          color: Constants().container,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 0),
+                child: Image.asset(
+                  imagePath,
+                  width: 53,
+                  height: 53,
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.026),
+              Text(text),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
