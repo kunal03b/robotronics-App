@@ -123,6 +123,8 @@ class ViewTask extends StatelessWidget {
                           imagePath: 'assets/repository.png',
                           text: 'Repository',
                           onTap: () {},
+                          linkUrl:
+                              'https://github.com/kunal03b/robotronics-App',
                         ),
                         SizedBox(
                           width: screenWidth * 0.037,
@@ -133,6 +135,7 @@ class ViewTask extends StatelessWidget {
                           imagePath: 'assets/powerpoint.png',
                           text: 'PowerPoint',
                           onTap: () {},
+                          linkUrl: '',
                         ),
                         SizedBox(
                           width: screenWidth * 0.037,
@@ -143,6 +146,7 @@ class ViewTask extends StatelessWidget {
                           imagePath: 'assets/word.png',
                           text: 'Project Report',
                           onTap: () {},
+                          linkUrl: '',
                         ),
                         SizedBox(
                           width: screenWidth * 0.037,
@@ -153,13 +157,78 @@ class ViewTask extends StatelessWidget {
                           imagePath: 'assets/ui.png',
                           text: 'UI Design',
                           onTap: () {},
+                          linkUrl: '',
                         ),
                       ],
                     ),
                   ),
 
                   SizedBox(
-                    height: screenHeight * 0.5,
+                    height: screenHeight * 0.02,
+                  ),
+
+                  Text(
+                    'Links:',
+                    style: TextStyle(color: Constants().textColor),
+                  ),
+
+                  SizedBox(
+                    height: screenHeight * 0.008,
+                  ),
+
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ViewTaskTile(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          imagePath: 'assets/github.png',
+                          text: 'Github',
+                          onTap: () {},
+                          linkUrl:
+                              'https://github.com/kunal03b/robotronics-App',
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.037,
+                        ),
+                        ViewTaskTile(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          imagePath: 'assets/figma.png',
+                          text: 'Figma Design',
+                          onTap: () {},
+                          linkUrl: '',
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.037,
+                        ),
+                        ViewTaskTile(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          imagePath: 'assets/docs.png',
+                          text: 'Docs File',
+                          onTap: () {},
+                          linkUrl: '',
+                        ),
+                        SizedBox(
+                          width: screenWidth * 0.037,
+                        ),
+                        ViewTaskTile(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          imagePath: 'assets/firebase.png',
+                          text: 'Firebase',
+                          onTap: () {},
+                          linkUrl: '',
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: screenHeight * 0.03,
                   ),
                   Center(
                     child: InkWell(

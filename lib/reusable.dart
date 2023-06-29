@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'constants.dart';
 
@@ -131,6 +132,7 @@ class ViewTaskTile extends StatelessWidget {
   final String imagePath;
   final String text;
   final VoidCallback onTap;
+  final String linkUrl;
 
   const ViewTaskTile({
     required this.screenHeight,
@@ -138,12 +140,21 @@ class ViewTaskTile extends StatelessWidget {
     required this.imagePath,
     required this.text,
     required this.onTap,
+    required this.linkUrl,
   });
 
   @override
+  Future<void> _launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () => _launchUrl(linkUrl),
       child: Container(
         height: screenHeight * 0.13,
         width: screenWidth * 0.24,
