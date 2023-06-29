@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:robotronics/constants.dart';
 import 'package:robotronics/reusable.dart';
-import 'package:robotronics/task%20Manager%20Screen/tasksScreen.dart';
 
 class ViewTask extends StatelessWidget {
   final String taskId;

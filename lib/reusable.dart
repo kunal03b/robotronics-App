@@ -156,8 +156,8 @@ class ViewTaskTile extends StatelessWidget {
     return InkWell(
       onTap: () => _launchUrl(linkUrl),
       child: Container(
-        height: screenHeight * 0.13,
-        width: screenWidth * 0.24,
+        height: screenHeight * 0.15,
+        width: screenWidth * 0.265,
         decoration: BoxDecoration(
           color: Constants().container,
           borderRadius: BorderRadius.circular(14),
@@ -170,8 +170,8 @@ class ViewTaskTile extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 0),
                 child: Image.asset(
                   imagePath,
-                  width: 53,
-                  height: 53,
+                  width: screenWidth * 0.24,
+                  height: screenHeight * 0.056,
                 ),
               ),
               SizedBox(height: screenHeight * 0.026),

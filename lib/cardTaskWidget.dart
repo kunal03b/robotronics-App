@@ -22,22 +22,6 @@ class TaskCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the current date
-    final DateTime currentDate = DateTime.now();
-    final String formattedDate = currentDate.toString();
-
-    // Update the assigned date in Firestore
-    // FirebaseFirestore.instance
-    //     .collection('task')
-    //     .doc(task.id)
-    //     .update({'assignedDate': formattedDate}).then((value) {
-    //   // Update successful
-    //   print('Assigned date updated successfully');
-    // }).catchError((error) {
-    //   // Handle update error
-    //   print('Failed to update assigned date: $error');
-    // });
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Card(
