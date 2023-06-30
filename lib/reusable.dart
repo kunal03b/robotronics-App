@@ -58,7 +58,7 @@ class WhiteRadioListTile<T> extends StatelessWidget {
         activeColor: Colors.white,
         title: Text(
           title,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Constants().textColor),
         ),
         controlAffinity: ListTileControlAffinity.leading,
       ),

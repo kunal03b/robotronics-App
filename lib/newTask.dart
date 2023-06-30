@@ -16,6 +16,52 @@ class _NewTaskState extends State<NewTask> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   String? selectedCategory;
 
+  List<String> availableMembers = [];
+  late List<bool> selectedMembers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAvailableMembers('iRfJH2rtYIuU6wfZhNkf').then((members) {
+      setState(() {
+        availableMembers = members;
+        selectedMembers = List<bool>.filled(members.length, false);
+      });
+    });
+  }
+
+  Future<List<String>> fetchAvailableMembers(String taskId) async {
+    final snapshot = await firestore.collection('task').doc(taskId).get();
+    final data = snapshot.data();
+    if (data != null && data.containsKey('availableMembers')) {
+      return List<String>.from(data['availableMembers']);
+    }
+    return [];
+  }
+
+  Future<void> updateAssignedMembers(
+      String taskId, List<String> assignedMembers) async {
+    try {
+      await firestore
+          .collection('task')
+          .doc(taskId)
+          .update({'assignedMembers': assignedMembers});
+      print('Assigned members updated successfully');
+    } catch (error) {
+      print('Failed to update assigned members: $error');
+    }
+  }
+
+  List<String> getSelectedMembers() {
+    List<String> selected = [];
+    for (int i = 0; i < availableMembers.length; i++) {
+      if (selectedMembers[i]) {
+        selected.add(availableMembers[i]);
+      }
+    }
+    return selected;
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -24,6 +70,8 @@ class _NewTaskState extends State<NewTask> {
     final double appBarIconSize = screenWidth * 0.13;
     String cdate = DateFormat("yyyy-MM-dd").format(DateTime.now());
     print(cdate);
+
+    // selectedMembers = List<bool>.filled(availableMembers.length, false);
 
     Future<void> updateAssignedDate(String taskId) async {
       final DateTime currentDate = DateTime.now();
@@ -49,17 +97,29 @@ class _NewTaskState extends State<NewTask> {
         'deadline': selectedDate,
         'assignedDate': '',
         'category': selectedCategory,
+        'assignedMembers': getSelectedMembers(),
       };
 
       try {
         DocumentReference docRef = await taskCollection.add(taskData);
         String taskId = docRef.id;
         print('Task added successfully!');
+        await updateAssignedMembers(taskId, getSelectedMembers());
         await updateAssignedDate(taskId);
       } catch (error) {
         print('Failed to add task: $error');
       }
     }
+
+    //   List<String> getSelectedMembers() {
+    //   List<String> selected = [];
+    //   for (int i = 0; i < availableMembers.length; i++) {
+    //     if (selectedMembers[i]) {
+    //       selected.add(availableMembers[i]);
+    //     }
+    //   }
+    //   return selected;
+    // }
 
     return Scaffold(
       backgroundColor: Constants().buttonBackground,
@@ -88,7 +148,7 @@ class _NewTaskState extends State<NewTask> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: screenHeight * 0.045),
               TextField(
                 controller: descriptionController,
                 maxLines: 3,
@@ -109,11 +169,42 @@ class _NewTaskState extends State<NewTask> {
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: screenHeight * 0.045,
               ),
               Text(
                 'Assigned Members',
                 style: TextStyle(color: Constants().textColor, fontSize: 16),
+              ),
+              FutureBuilder<List<String>>(
+                future: fetchAvailableMembers('iRfJH2rtYIuU6wfZhNkf'),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    availableMembers = snapshot.data!;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: availableMembers.length,
+                      itemBuilder: (context, index) {
+                        return CheckboxListTile(
+                          value: selectedMembers[index],
+                          onChanged: (value) {
+                            setState(() {
+                              selectedMembers[index] = value ?? false;
+                            });
+                          },
+                          title: Text(
+                            availableMembers[index],
+                            style: TextStyle(color: Constants().textColor),
+                          ),
+                          // controlAffinity: ListTileControlAffinity.leading,
+                        );
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Failed to fetch available members');
+                  } else {
+                    return CircularProgressIndicator();
+                  }
+                },
               ),
               SizedBox(
                 height: screenHeight * 0.1,
@@ -143,15 +234,19 @@ class _NewTaskState extends State<NewTask> {
                 child: Container(
                     width: screenWidth * 0.4,
                     height: screenHeight * 0.05,
+                    // color: Color.fromRGBO(217, 217, 217, 0.41),
                     decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Constants().textColor, width: 1.6),
+                      color: Color.fromRGBO(217, 217, 217, 0.41),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.calendar_today_rounded,
-                          color: Colors.white,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Icon(
+                            Icons.calendar_today_rounded,
+                            color: Colors.white,
+                          ),
                         ),
                         SizedBox(
                           width: screenWidth * 0.015,
@@ -181,6 +276,7 @@ class _NewTaskState extends State<NewTask> {
                 height: screenHeight * 0.008,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     height: screenHeight * 0.235,
@@ -239,20 +335,23 @@ class _NewTaskState extends State<NewTask> {
                     onTap: () {
                       addTask();
                     },
-                    child: Container(
-                      width: screenWidth * 0.15,
-                      height: screenHeight * 0.15,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color.fromRGBO(255, 255, 255, 1),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        '>',
-                        style: TextStyle(
-                            fontSize: 60,
-                            // fontWeight: FontWeight.w900,
-                            color: Color.fromRGBO(32, 38, 46, 1)),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                        width: screenWidth * 0.15,
+                        height: screenHeight * 0.15,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          '>',
+                          style: TextStyle(
+                              fontSize: 60,
+                              // fontWeight: FontWeight.w900,
+                              color: Color.fromRGBO(32, 38, 46, 1)),
+                        ),
                       ),
                     ),
                   ),

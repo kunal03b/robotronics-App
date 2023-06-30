@@ -36,6 +36,7 @@ class ViewTask extends StatelessWidget {
         String category = taskData['category'];
         String deadline = taskData['deadline'];
         String assignedDate = taskData['assignedDate'];
+        // String assignedMembers = taskData['assignedMembers'];
 
         return Scaffold(
           appBar: appBarMethod(screenHeight, appBarIconSize, avatarRadius),
@@ -68,7 +69,7 @@ class ViewTask extends StatelessWidget {
                         TextStyle(color: Constants().textColor, fontSize: 16),
                   ),
                   SizedBox(
-                    height: screenHeight * 0.042,
+                    height: screenHeight * 0.02,
                   ),
                   Container(
                     height: screenHeight * 0.04,

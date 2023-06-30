@@ -9,6 +9,7 @@ class TaskModel {
   final String deadline;
   final String taskCategory;
   final String assignedDate;
+  final String assignedMembers;
 
   TaskModel(
       {this.docID,
@@ -16,7 +17,8 @@ class TaskModel {
       required this.description,
       required this.deadline,
       required this.taskCategory,
-      required this.assignedDate});
+      required this.assignedDate,
+      required this.assignedMembers});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -26,6 +28,7 @@ class TaskModel {
       'deadline': deadline,
       'taskCategory': taskCategory,
       'assignedDate': assignedDate,
+      'assignedMembers': assignedMembers,
     };
   }
 
@@ -37,16 +40,19 @@ class TaskModel {
       deadline: map['deadline'] as String,
       taskCategory: map['taskCategory'] as String,
       assignedDate: map['assignedDate'] as String,
+      assignedMembers: map['assignedMembers'] as String,
     );
   }
 
   factory TaskModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
     return TaskModel(
-        docID: doc.id,
-        title: doc['title'],
-        description: doc['description'],
-        deadline: doc['deadline'],
-        taskCategory: doc['taskCategory'],
-        assignedDate: doc['assignedDate']);
+      docID: doc.id,
+      title: doc['title'],
+      description: doc['description'],
+      deadline: doc['deadline'],
+      taskCategory: doc['taskCategory'],
+      assignedDate: doc['assignedDate'],
+      assignedMembers: doc['assignedMembers'],
+    );
   }
 }
