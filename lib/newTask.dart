@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:robotronics/constants.dart';
 import 'package:robotronics/reusable.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class NewTask extends StatefulWidget {
   @override
@@ -111,17 +112,18 @@ class _NewTaskState extends State<NewTask> {
       }
     }
 
-    //   List<String> getSelectedMembers() {
-    //   List<String> selected = [];
-    //   for (int i = 0; i < availableMembers.length; i++) {
-    //     if (selectedMembers[i]) {
-    //       selected.add(availableMembers[i]);
-    //     }
-    //   }
-    //   return selected;
-    // }
-
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          addTask()
+              .then((value) => {Fluttertoast.showToast(msg: 'Task Saved')});
+        },
+        backgroundColor: Constants().textColor,
+        child: Icon(
+          Icons.save,
+          color: Constants().buttonBackground,
+        ),
+      ),
       backgroundColor: Constants().buttonBackground,
       appBar: appBarMethod(screenHeight, appBarIconSize, avatarRadius),
       body: Padding(
@@ -171,43 +173,41 @@ class _NewTaskState extends State<NewTask> {
               SizedBox(
                 height: screenHeight * 0.045,
               ),
-              Text(
-                'Assigned Members',
-                style: TextStyle(color: Constants().textColor, fontSize: 16),
-              ),
-              FutureBuilder<List<String>>(
-                future: fetchAvailableMembers('iRfJH2rtYIuU6wfZhNkf'),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    availableMembers = snapshot.data!;
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: availableMembers.length,
-                      itemBuilder: (context, index) {
-                        return CheckboxListTile(
-                          value: selectedMembers[index],
-                          onChanged: (value) {
-                            setState(() {
-                              selectedMembers[index] = value ?? false;
-                            });
-                          },
-                          title: Text(
-                            availableMembers[index],
-                            style: TextStyle(color: Constants().textColor),
-                          ),
-                          // controlAffinity: ListTileControlAffinity.leading,
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('Failed to fetch available members');
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                },
-              ),
+              ExpandableContainer(title: 'Assigned Members', children: [
+                FutureBuilder<List<String>>(
+                  future: fetchAvailableMembers('iRfJH2rtYIuU6wfZhNkf'),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      availableMembers = snapshot.data!;
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: availableMembers.length,
+                        itemBuilder: (context, index) {
+                          return CheckboxListTile(
+                            value: selectedMembers[index],
+                            onChanged: (value) {
+                              setState(() {
+                                selectedMembers[index] = value ?? false;
+                              });
+                            },
+                            title: Text(
+                              availableMembers[index],
+                              style: TextStyle(color: Constants().textColor),
+                            ),
+                            // controlAffinity: ListTileControlAffinity.leading,
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Failed to fetch available members');
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                ),
+              ]),
               SizedBox(
-                height: screenHeight * 0.1,
+                height: screenHeight * 0.03,
               ),
               Text(
                 'Deadline:',
@@ -280,7 +280,7 @@ class _NewTaskState extends State<NewTask> {
                 children: [
                   Container(
                     height: screenHeight * 0.235,
-                    width: screenWidth * 0.45,
+                    width: screenWidth * 0.467,
                     decoration: BoxDecoration(
                       border:
                           Border.all(color: Constants().textColor, width: 1.6),
@@ -329,30 +329,6 @@ class _NewTaskState extends State<NewTask> {
                           title: 'Marketing',
                         ),
                       ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      addTask();
-                    },
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Container(
-                        width: screenWidth * 0.15,
-                        height: screenHeight * 0.15,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color.fromRGBO(255, 255, 255, 1),
-                        ),
-                        alignment: Alignment.center,
-                        child: const Text(
-                          '>',
-                          style: TextStyle(
-                              fontSize: 60,
-                              // fontWeight: FontWeight.w900,
-                              color: Color.fromRGBO(32, 38, 46, 1)),
-                        ),
-                      ),
                     ),
                   ),
                 ],

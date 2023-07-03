@@ -183,3 +183,53 @@ class ViewTaskTile extends StatelessWidget {
     );
   }
 }
+
+// Visibility widget
+
+class ExpandableContainer extends StatefulWidget {
+  final String title;
+  final List<Widget> children;
+
+  ExpandableContainer({required this.title, required this.children});
+
+  @override
+  _ExpandableContainerState createState() => _ExpandableContainerState();
+}
+
+class _ExpandableContainerState extends State<ExpandableContainer> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isExpanded = !_isExpanded;
+            });
+          },
+          child: Row(
+            children: <Widget>[
+              Text(widget.title,
+                  style:
+                      TextStyle(fontSize: 16.0, color: Constants().textColor)),
+              Icon(
+                _isExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                color: Constants().textColor,
+                size: 35,
+              ),
+            ],
+          ),
+        ),
+        Visibility(
+          visible: _isExpanded,
+          child: Column(
+            children: widget.children,
+          ),
+        ),
+      ],
+    );
+  }
+}

@@ -59,8 +59,8 @@ class ViewTask extends StatelessWidget {
                   Divider(
                     thickness: 1.2,
                     color: Constants().textColor,
-                    indent: screenWidth * 0.025,
-                    endIndent: screenWidth * 0.025,
+                    indent: screenWidth * 0.016,
+                    endIndent: screenWidth * 0.027,
                   ),
                   SizedBox(height: screenHeight * 0.01),
                   Text(
