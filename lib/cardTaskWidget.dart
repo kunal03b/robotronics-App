@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:robotronics/constants.dart';
 import 'package:robotronics/viewTask.dart';
 
-class TaskCardWidget extends StatelessWidget {
+class TaskCardWidget extends StatefulWidget {
   final double screenWidth;
   final double cardWidth;
   final double cardHeight;
@@ -21,53 +21,65 @@ class TaskCardWidget extends StatelessWidget {
   });
 
   @override
+  State<TaskCardWidget> createState() => _TaskCardWidgetState();
+}
+
+class _TaskCardWidgetState extends State<TaskCardWidget> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Card(
         color: Color.fromRGBO(217, 217, 217, 1),
         margin: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.05,
+          horizontal: widget.screenWidth * 0.05,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(screenWidth * 0.04),
+          borderRadius: BorderRadius.circular(widget.screenWidth * 0.04),
         ),
         child: Container(
-          width: cardWidth,
-          height: cardHeight,
-          padding: EdgeInsets.all(screenWidth * 0.04),
+          width: widget.cardWidth,
+          height: widget.cardHeight,
+          padding: EdgeInsets.all(widget.screenWidth * 0.04),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(
-                  task['title'].toString(),
+                  widget.task["title"].toString().toUpperCase(),
                   style: TextStyle(
-                    fontSize: subtitleFontSize,
+                    fontSize: widget.subtitleFontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Text(
-                  task['description'].toString(),
+                  widget.task['description'].toString(),
                   maxLines: 2,
                   style: TextStyle(color: Colors.black),
                 ),
               ),
-              SizedBox(height: screenHeight * 0.015),
+              SizedBox(height: widget.screenHeight * 0.015),
               Row(
                 children: [
-                  for (int i = 0; i < 5; i++)
+                  for (int i = 0;
+                      i < widget.task['assignedMembers'].length;
+                      i++)
                     Padding(
-                      padding: EdgeInsets.only(right: screenWidth * 0.02),
+                      padding:
+                          EdgeInsets.only(right: widget.screenWidth * 0.02),
                       child: CircleAvatar(
                         backgroundColor: Colors.grey.shade900,
-                        radius: screenWidth * 0.042,
+                        radius: widget.screenWidth * 0.042,
+                        child: Text(
+                          widget.task['assignedMembers'][i][0],
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        ),
                       ),
                     ),
                 ],
               ),
-              SizedBox(height: screenHeight * 0.015),
+              SizedBox(height: widget.screenHeight * 0.015),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -75,15 +87,15 @@ class TaskCardWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Assigned - ${task['assignedDate'].toString()}', // Use the assigned date from the database
+                        'Assigned - ${widget.task['assignedDate'].toString()}', // Use the assigned date from the database
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.001),
+                      SizedBox(height: widget.screenHeight * 0.001),
                       Text(
-                        'Deadline - ${task['deadline'].toString()}',
+                        'Deadline - ${widget.task['deadline'].toString()}',
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -96,13 +108,14 @@ class TaskCardWidget extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ViewTask(taskId: task.id),
+                          builder: (context) =>
+                              ViewTask(taskId: widget.task.id),
                         ),
                       );
                     },
                     child: Container(
-                      width: screenWidth / 3.5,
-                      height: screenHeight / 20,
+                      width: widget.screenWidth / 3.5,
+                      height: widget.screenHeight / 20,
                       decoration: BoxDecoration(
                         color: Constants().buttonBackground,
                         borderRadius: BorderRadius.circular(50),

@@ -6,7 +6,17 @@ import 'package:robotronics/viewTask.dart';
 import '../cardTaskWidget.dart';
 import '../reusable.dart';
 
-class TaskManagerScreen extends StatelessWidget {
+class TaskManagerScreen extends StatefulWidget {
+  final String selectedCategory;
+  // TaskManagerScreen({required this.selectedCategory});
+
+  TaskManagerScreen({required this.selectedCategory});
+
+  @override
+  State<TaskManagerScreen> createState() => _TaskManagerScreenState();
+}
+
+class _TaskManagerScreenState extends State<TaskManagerScreen> {
   final CollectionReference taskCollection =
       FirebaseFirestore.instance.collection('task');
 
@@ -50,7 +60,15 @@ class TaskManagerScreen extends StatelessWidget {
                   height: screenHeight,
                   width: screenWidth,
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: taskCollection.snapshots(),
+                    stream: widget.selectedCategory.isNotEmpty
+                        ? taskCollection
+                            .where('category',
+                                isEqualTo: widget.selectedCategory)
+                            .orderBy('assignedDate', descending: false)
+                            .snapshots()
+                        : taskCollection
+                            .orderBy('assignedDate', descending: false)
+                            .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');

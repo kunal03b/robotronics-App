@@ -31,7 +31,7 @@ AppBar appBarMethod(
   );
 }
 
-class WhiteRadioListTile<T> extends StatelessWidget {
+class WhiteRadioListTile<T> extends StatefulWidget {
   final T value;
   final T? groupValue;
   final ValueChanged<T?> onChanged;
@@ -46,18 +46,23 @@ class WhiteRadioListTile<T> extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<WhiteRadioListTile<T>> createState() => _WhiteRadioListTileState<T>();
+}
+
+class _WhiteRadioListTileState<T> extends State<WhiteRadioListTile<T>> {
+  @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(
         unselectedWidgetColor: Colors.white,
       ),
       child: RadioListTile<T>(
-        value: value,
-        groupValue: groupValue,
-        onChanged: onChanged,
+        value: widget.value,
+        groupValue: widget.groupValue,
+        onChanged: widget.onChanged,
         activeColor: Colors.white,
         title: Text(
-          title,
+          widget.title,
           style: TextStyle(color: Constants().textColor),
         ),
         controlAffinity: ListTileControlAffinity.leading,
@@ -66,7 +71,7 @@ class WhiteRadioListTile<T> extends StatelessWidget {
   }
 }
 
-class dateWidget extends StatelessWidget {
+class dateWidget extends StatefulWidget {
   const dateWidget({
     Key? key,
     required this.screenWidth,
@@ -81,6 +86,11 @@ class dateWidget extends StatelessWidget {
   final String selectedDate;
 
   @override
+  State<dateWidget> createState() => _dateWidgetState();
+}
+
+class _dateWidgetState extends State<dateWidget> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
@@ -92,13 +102,13 @@ class dateWidget extends StatelessWidget {
         );
 
         if (picked != null) {
-          onDateSelected(picked);
+          widget.onDateSelected(picked);
           print('Selected Date: $picked');
         }
       },
       child: Container(
-        width: screenWidth * 0.38,
-        height: screenHeight * 0.038,
+        width: widget.screenWidth * 0.38,
+        height: widget.screenHeight * 0.038,
         decoration: BoxDecoration(
           color: Color.fromRGBO(217, 217, 217, 0.41),
           borderRadius: BorderRadius.circular(13),
@@ -114,7 +124,9 @@ class dateWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 9),
                 child: Text(
-                  selectedDate.isNotEmpty ? selectedDate : 'DD/MM/YYYY',
+                  widget.selectedDate.isNotEmpty
+                      ? widget.selectedDate
+                      : 'DD/MM/YYYY',
                   style: TextStyle(color: Constants().textColor),
                 ),
               ),
@@ -126,7 +138,7 @@ class dateWidget extends StatelessWidget {
   }
 }
 
-class ViewTaskTile extends StatelessWidget {
+class ViewTaskTile extends StatefulWidget {
   final double screenHeight;
   final double screenWidth;
   final String imagePath;
@@ -144,6 +156,11 @@ class ViewTaskTile extends StatelessWidget {
   });
 
   @override
+  State<ViewTaskTile> createState() => _ViewTaskTileState();
+}
+
+class _ViewTaskTileState extends State<ViewTaskTile> {
+  @override
   Future<void> _launchUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
@@ -154,10 +171,10 @@ class ViewTaskTile extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => _launchUrl(linkUrl),
+      onTap: () => _launchUrl(widget.linkUrl),
       child: Container(
-        height: screenHeight * 0.15,
-        width: screenWidth * 0.265,
+        height: widget.screenHeight * 0.15,
+        width: widget.screenWidth * 0.265,
         decoration: BoxDecoration(
           color: Constants().container,
           borderRadius: BorderRadius.circular(14),
@@ -169,13 +186,13 @@ class ViewTaskTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 0),
                 child: Image.asset(
-                  imagePath,
-                  width: screenWidth * 0.24,
-                  height: screenHeight * 0.056,
+                  widget.imagePath,
+                  width: widget.screenWidth * 0.24,
+                  height: widget.screenHeight * 0.056,
                 ),
               ),
-              SizedBox(height: screenHeight * 0.026),
-              Text(text),
+              SizedBox(height: widget.screenHeight * 0.026),
+              Text(widget.text),
             ],
           ),
         ),

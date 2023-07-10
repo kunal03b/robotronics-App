@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:robotronics/chatGPT.dart';
 import 'package:robotronics/constants.dart';
 import 'package:robotronics/newTask.dart';
+import 'package:robotronics/projects.dart';
 import 'package:robotronics/reusable.dart';
 import 'package:robotronics/task%20Manager%20Screen/tasksScreen.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  String? selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +23,32 @@ class Home extends StatelessWidget {
     final double avatarRadius = screenWidth * 0.05;
     final double appBarIconSize = screenWidth * 0.13;
     return Scaffold(
+      floatingActionButton: Container(
+        // width: screenWidth * 0.1,
+        // height: screenHeight * 0.09,
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(
+              color: Constants().tileColor,
+              spreadRadius: 4,
+              blurRadius: 10,
+              offset: Offset(0, 0)),
+        ], borderRadius: BorderRadius.circular(100)),
+        child: FloatingActionButton(
+          elevation: 0,
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => chatGPT()));
+          },
+          backgroundColor: Constants().textColor,
+
+          child: Image(image: AssetImage('assets/chatgpt.png')),
+
+          // child: Icon(
+          //   Icons.,
+          //   color: Constants().buttonBackground,
+          // ),
+        ),
+      ),
       appBar: appBarMethod(screenHeight, appBarIconSize, avatarRadius),
       backgroundColor: Constants().buttonBackground,
       body: SingleChildScrollView(
@@ -91,9 +126,13 @@ class Home extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => NewTask()));
                       print('Hello from Add Task');
                     },
-                    child: Text(
-                      'Add Task',
-                      style: TextStyle(color: Constants().textColor),
+                    child: Container(
+                      width: screenWidth * 0.16,
+                      height: screenHeight * 0.025,
+                      child: Text(
+                        'Add Task',
+                        style: TextStyle(color: Constants().textColor),
+                      ),
                     ),
                   ),
                 ),
@@ -107,12 +146,19 @@ class Home extends StatelessWidget {
                   screenWidth,
                   screenHeight,
                   'assets/Operation.png',
-                  'OPERATIONAL',
+                  'Operational',
                   () {
+                    setState(() {
+                      selectedCategory = 'Operational';
+                    });
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TaskManagerScreen()));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TaskManagerScreen(
+                          selectedCategory: selectedCategory ?? "",
+                        ),
+                      ),
+                    );
                     // print('Coming from Operational Tasks');
                   },
                 ),
@@ -120,8 +166,20 @@ class Home extends StatelessWidget {
                   screenWidth,
                   screenHeight,
                   'assets/Technical.png',
-                  'TECHNICAL',
+                  'Technical',
                   () {
+                    setState(() {
+                      selectedCategory = 'Technical';
+                    });
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TaskManagerScreen(
+                          selectedCategory: selectedCategory ?? "",
+                        ),
+                      ),
+                    );
                     print('Coming from Technical Tasks');
                   },
                 ),
@@ -129,8 +187,19 @@ class Home extends StatelessWidget {
                   screenWidth,
                   screenHeight,
                   'assets/Marketing.png',
-                  'MARKETING',
+                  'Marketing',
                   () {
+                    setState(() {
+                      selectedCategory = 'Marketing';
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TaskManagerScreen(
+                          selectedCategory: selectedCategory ?? "",
+                        ),
+                      ),
+                    );
                     print('Coming from Marketing Tasks');
                   },
                 ),
@@ -158,10 +227,16 @@ class Home extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       print('Hello from PREVIOUS PROJECTS');
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => projects()));
                     },
-                    child: Text(
-                      'New Project',
-                      style: TextStyle(color: Constants().textColor),
+                    child: Container(
+                      width: screenWidth * 0.16,
+                      height: screenHeight * 0.025,
+                      child: Text(
+                        'View All',
+                        style: TextStyle(color: Constants().textColor),
+                      ),
                     ),
                   ),
                 ),
@@ -211,12 +286,21 @@ class Home extends StatelessWidget {
   Widget buildTaskCard(double screenWidth, double screenHeight,
       String imagePath, String title, VoidCallback onTap) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TaskManagerScreen(selectedCategory: title),
+          ),
+        );
+      },
       child: Container(
         width: screenWidth * 0.29,
         height: screenHeight * 0.175,
         decoration: BoxDecoration(
-          color: Constants().tileColor,
+          color: selectedCategory == title
+              ? Constants().tileColor
+              : Constants().tileColor,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
@@ -274,7 +358,7 @@ class upcomingEventTile extends StatelessWidget {
         ),
         Container(
           height: screenHeight * 0.05,
-          width: screenWidth * 0.7,
+          width: screenWidth * 0.69,
           decoration: BoxDecoration(
               color: Constants().container,
               borderRadius: BorderRadius.circular(20)),

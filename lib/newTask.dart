@@ -10,6 +10,7 @@ class NewTask extends StatefulWidget {
   _NewTaskState createState() => _NewTaskState();
 }
 
+//malta == love
 class _NewTaskState extends State<NewTask> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -23,7 +24,7 @@ class _NewTaskState extends State<NewTask> {
   @override
   void initState() {
     super.initState();
-    fetchAvailableMembers('iRfJH2rtYIuU6wfZhNkf').then((members) {
+    fetchCoreMembers().then((members) {
       setState(() {
         availableMembers = members;
         selectedMembers = List<bool>.filled(members.length, false);
@@ -38,6 +39,17 @@ class _NewTaskState extends State<NewTask> {
       return List<String>.from(data['availableMembers']);
     }
     return [];
+  }
+
+  Future<List<String>> fetchCoreMembers() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('Role', isEqualTo: 'Core Member')
+        .get();
+    final List<String> members = snapshot.docs
+        .map((doc) => (doc.data() as Map<String, dynamic>)['Name'] as String)
+        .toList();
+    return members;
   }
 
   Future<void> updateAssignedMembers(
@@ -61,6 +73,32 @@ class _NewTaskState extends State<NewTask> {
       }
     }
     return selected;
+  }
+
+  Future<void> saveDataToFirebase(String firebaseLink) async {
+    // Get a reference to the Firebase collection
+    final CollectionReference taskCollection = firestore.collection('task');
+
+    // Create a map with the data to be saved
+    Map<String, dynamic> taskData = {
+      'firebaseLink': firebaseLink,
+    };
+
+    try {
+      // Add the task data to Firebase
+      await taskCollection.add(taskData);
+      print('Data saved to Firebase successfully!');
+    } catch (error) {
+      print('Failed to save data to Firebase: $error');
+    }
+  }
+
+  final TextEditingController _firebaseLinkController = TextEditingController();
+
+  @override
+  void dispose() {
+    _firebaseLinkController.dispose();
+    super.dispose();
   }
 
   @override
@@ -117,6 +155,8 @@ class _NewTaskState extends State<NewTask> {
         onPressed: () {
           addTask()
               .then((value) => {Fluttertoast.showToast(msg: 'Task Saved')});
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => NewTask()));
         },
         backgroundColor: Constants().textColor,
         child: Icon(
@@ -143,7 +183,7 @@ class _NewTaskState extends State<NewTask> {
                   controller: titleController,
                   style: TextStyle(color: Constants().textColor, fontSize: 20),
                   decoration: InputDecoration(
-                    hintText: 'Add Title',
+                    hintText: "Add Title",
                     hintStyle:
                         TextStyle(color: Constants().textColor, fontSize: 27),
                     border: InputBorder.none,
@@ -175,28 +215,66 @@ class _NewTaskState extends State<NewTask> {
               ),
               ExpandableContainer(title: 'Assigned Members', children: [
                 FutureBuilder<List<String>>(
-                  future: fetchAvailableMembers('iRfJH2rtYIuU6wfZhNkf'),
+                  future: fetchCoreMembers(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       availableMembers = snapshot.data!;
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: availableMembers.length,
-                        itemBuilder: (context, index) {
-                          return CheckboxListTile(
-                            value: selectedMembers[index],
-                            onChanged: (value) {
-                              setState(() {
-                                selectedMembers[index] = value ?? false;
-                              });
-                            },
-                            title: Text(
-                              availableMembers[index],
-                              style: TextStyle(color: Constants().textColor),
-                            ),
-                            // controlAffinity: ListTileControlAffinity.leading,
-                          );
-                        },
+                      return SingleChildScrollView(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: availableMembers.length,
+                          separatorBuilder: (context, index) => SizedBox(
+                            height: 2,
+                          ),
+                          itemBuilder: (context, index) {
+                            final member = availableMembers[index];
+                            final isSelected = selectedMembers[index];
+
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedMembers[index] = !isSelected;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Constants().tileColor
+                                        : null,
+                                    // border: Border.all(
+                                    //   color: Colors.grey,
+                                    //   // width: 1.0,
+                                    // ),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 20,
+                                      child: Text(
+                                        availableMembers[index][0],
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color:
+                                                Constants().buttonBackground),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      backgroundColor: Constants().container,
+                                    ),
+                                    SizedBox(
+                                      width: screenWidth * 0.05,
+                                    ),
+                                    Text(
+                                      member,
+                                      style: TextStyle(
+                                          color: Constants().textColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       );
                     } else if (snapshot.hasError) {
                       return Text('Failed to fetch available members');
@@ -333,6 +411,72 @@ class _NewTaskState extends State<NewTask> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: screenHeight * 0.03,
+              ),
+              Text(
+                'Add Docs:',
+                style: TextStyle(color: Constants().textColor, fontSize: 18),
+              ),
+              Row(
+                children: [
+                  newTaskLinks(context, screenHeight),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  InkWell newTaskLinks(BuildContext context, double screenHeight) {
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Firebase Link'),
+              content: TextField(
+                cursorColor: Constants().buttonBackground,
+                controller: _firebaseLinkController,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    String firebaseLink = _firebaseLinkController.text;
+                    saveDataToFirebase(firebaseLink);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Container(
+        height: screenHeight * 0.15,
+        width: screenHeight * 0.265,
+        decoration: BoxDecoration(
+          color: Constants().container,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 0),
+                child: Image.asset(
+                  'assets/firebase.png',
+                  width: screenHeight * 0.24,
+                  height: screenHeight * 0.056,
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.026),
+              Text('text'),
             ],
           ),
         ),

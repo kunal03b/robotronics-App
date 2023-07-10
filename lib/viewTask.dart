@@ -3,11 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:robotronics/constants.dart';
 import 'package:robotronics/reusable.dart';
 
-class ViewTask extends StatelessWidget {
+class ViewTask extends StatefulWidget {
   final String taskId;
 
   const ViewTask({Key? key, required this.taskId}) : super(key: key);
 
+  @override
+  State<ViewTask> createState() => _ViewTaskState();
+}
+
+class _ViewTaskState extends State<ViewTask> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -19,7 +24,7 @@ class ViewTask extends StatelessWidget {
         FirebaseFirestore.instance.collection('task');
 
     return FutureBuilder<DocumentSnapshot>(
-      future: tasksCollection.doc(taskId).get(),
+      future: tasksCollection.doc(widget.taskId).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
