@@ -8,21 +8,17 @@ class ViewTask extends StatefulWidget {
 
   const ViewTask({Key? key, required this.taskId}) : super(key: key);
 
-  // const ViewTask({Key? key, required this.taskId}) : super(key: key);
-
   @override
   State<ViewTask> createState() => _ViewTaskState();
 }
 
 class _ViewTaskState extends State<ViewTask> {
-  late Map<String, dynamic> task;
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     final double avatarRadius = screenWidth * 0.05;
     final double appBarIconSize = screenWidth * 0.13;
-    // final QueryDocumentSnapshot<Object?> task;
 
     CollectionReference tasksCollection =
         FirebaseFirestore.instance.collection('task');
@@ -38,8 +34,6 @@ class _ViewTaskState extends State<ViewTask> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }
-
-        task = snapshot.data!.data()!;
 
         var taskData = snapshot.data!.data() as Map<String, dynamic>;
         String title = taskData['title'];
@@ -81,35 +75,6 @@ class _ViewTaskState extends State<ViewTask> {
                   ),
                   SizedBox(
                     height: screenHeight * 0.02,
-                  ),
-
-                  Row(
-                    children: [
-                      for (int i = 0; i < task['assignedMembers'].length; i++)
-                        Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(right: screenWidth * 0.02),
-                              child: CircleAvatar(
-                                backgroundColor: Colors.grey.shade900,
-                                radius: screenWidth * 0.042,
-                                child: Text(
-                                  task['assignedMembers'][i][0],
-                                  style: TextStyle(
-                                      fontSize: 16, color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Text(
-                              task['assignedMembers'][i][
-                                  1], // Assuming the member names are stored in the second index [1]
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.black),
-                            ),
-                          ],
-                        ),
-                    ],
                   ),
 
                   SizedBox(
