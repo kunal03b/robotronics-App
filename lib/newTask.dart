@@ -418,65 +418,58 @@ class _NewTaskState extends State<NewTask> {
                 'Add Docs:',
                 style: TextStyle(color: Constants().textColor, fontSize: 18),
               ),
-              Row(
-                children: [
-                  newTaskLinks(context, screenHeight),
-                ],
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Firebase Link'),
+                        content: TextField(
+                          cursorColor: Constants().buttonBackground,
+                          controller: _firebaseLinkController,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              String firebaseLink =
+                                  _firebaseLinkController.text;
+                              saveDataToFirebase(firebaseLink);
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  height: screenHeight * 0.13,
+                  width: screenWidth * 0.241,
+                  decoration: BoxDecoration(
+                    color: Constants().container,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 0),
+                          child: Image.asset(
+                            'assets/firebase.png',
+                            width: screenHeight * 0.24,
+                            height: screenHeight * 0.056,
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * 0.026),
+                        Text('text'),
+                      ],
+                    ),
+                  ),
+                ),
               )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  InkWell newTaskLinks(BuildContext context, double screenHeight) {
-    return InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Firebase Link'),
-              content: TextField(
-                cursorColor: Constants().buttonBackground,
-                controller: _firebaseLinkController,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    String firebaseLink = _firebaseLinkController.text;
-                    saveDataToFirebase(firebaseLink);
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      },
-      child: Container(
-        height: screenHeight * 0.15,
-        width: screenHeight * 0.265,
-        decoration: BoxDecoration(
-          color: Constants().container,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 0),
-                child: Image.asset(
-                  'assets/firebase.png',
-                  width: screenHeight * 0.24,
-                  height: screenHeight * 0.056,
-                ),
-              ),
-              SizedBox(height: screenHeight * 0.026),
-              Text('text'),
             ],
           ),
         ),

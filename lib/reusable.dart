@@ -173,8 +173,8 @@ class _ViewTaskTileState extends State<ViewTaskTile> {
     return InkWell(
       onTap: () => _launchUrl(widget.linkUrl),
       child: Container(
-        height: widget.screenHeight * 0.15,
-        width: widget.screenWidth * 0.265,
+        height: widget.screenHeight * 0.13,
+        width: widget.screenWidth * 0.241,
         decoration: BoxDecoration(
           color: Constants().container,
           borderRadius: BorderRadius.circular(14),
