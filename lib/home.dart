@@ -5,6 +5,7 @@ import 'package:robotronics/newTask.dart';
 import 'package:robotronics/projects.dart';
 import 'package:robotronics/reusable.dart';
 import 'package:robotronics/task%20Manager%20Screen/tasksScreen.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key});
@@ -58,51 +59,78 @@ class _HomeState extends State<Home> {
           children: [
             SingleChildScrollView(
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: screenWidth * 0.03),
-                      child: Text(
-                        'UPCOMING EVENTS',
-                        style: TextStyle(
-                            color: Constants().textColor,
-                            fontSize: screenWidth * 0.05,
-                            fontWeight: FontWeight.bold),
-                      ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: screenWidth * 0.03),
+                    child: Text(
+                      'UPCOMING EVENTS',
+                      style: TextStyle(
+                          color: Constants().textColor,
+                          fontSize: screenWidth * 0.05,
+                          fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
-                      height: screenHeight * 0.015,
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.015,
+                  ),
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      aspectRatio: 16 / 7,
+                      viewportFraction: 0.79,
+                      enlargeCenterPage: true,
                     ),
-                    Center(
-                      child: Container(
-                        width: screenWidth * 0.94,
-                        height: screenHeight * 0.17,
+                    items: [
+                      Container(
+                        width: screenWidth * 1,
+                        height: screenHeight * 0.25,
                         decoration: BoxDecoration(
+                            // image: DecorationImage(
+                            //     image: NetworkImage(p1 ?? ''),
+                            //     fit: BoxFit.fill),
                             color: Constants().tileColor,
                             borderRadius: BorderRadius.circular(27)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                              // crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                upcomingEventTile(
-                                    screenWidth: screenWidth,
-                                    screenHeight: screenHeight),
-                                SizedBox(
-                                  height: screenHeight * 0.013,
-                                ),
-                                upcomingEventTile(
-                                    screenWidth: screenWidth,
-                                    screenHeight: screenHeight)
-                              ]),
-                        ),
                       ),
-                    )
-                  ]),
+                      Container(
+                        width: screenWidth * 1,
+                        height: screenHeight * 0.25,
+                        decoration: BoxDecoration(
+                            // image: DecorationImage(
+                            //     image: NetworkImage(p2 ?? ''),
+                            //     fit: BoxFit.fill),
+                            color: Constants().tileColor,
+                            borderRadius: BorderRadius.circular(27)),
+                      ),
+                      Container(
+                        width: screenWidth * 1,
+                        height: screenHeight * 0.25,
+                        decoration: BoxDecoration(
+                            // image: DecorationImage(
+                            //     image: NetworkImage(p3 ?? ''),
+                            //     fit: BoxFit.fill),
+                            color: Constants().tileColor,
+                            borderRadius: BorderRadius.circular(27)),
+                      ),
+                      Container(
+                        width: screenWidth * 1,
+                        height: screenHeight * 0.25,
+                        decoration: BoxDecoration(
+                            // image: DecorationImage(
+                            //     image: NetworkImage(p4 ?? ''),
+                            //     fit: BoxFit.fill),
+                            color: Constants().tileColor,
+                            borderRadius: BorderRadius.circular(27)),
+                      ),
+
+                      // Add more Image widgets with different photos
+                    ],
+                  ),
+                ],
+              ),
             ),
             SizedBox(
-              height: screenHeight * 0.065,
+              height: screenHeight * 0.03,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

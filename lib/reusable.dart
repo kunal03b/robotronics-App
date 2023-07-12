@@ -192,7 +192,7 @@ class _ViewTaskTileState extends State<ViewTaskTile> {
                 ),
               ),
               SizedBox(height: widget.screenHeight * 0.026),
-              Text(widget.text),
+              Center(child: Text(widget.text)),
             ],
           ),
         ),
