@@ -233,6 +233,7 @@ class _NewTaskState extends State<NewTask> {
                       availableMembers = snapshot.data!;
                       return SingleChildScrollView(
                         child: ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: availableMembers.length,
                           separatorBuilder: (context, index) => SizedBox(
@@ -365,7 +366,7 @@ class _NewTaskState extends State<NewTask> {
                 children: [
                   Container(
                     height: screenHeight * 0.235,
-                    width: screenWidth * 0.467,
+                    width: screenWidth * 0.5,
                     decoration: BoxDecoration(
                       border:
                           Border.all(color: Constants().textColor, width: 1.6),

@@ -155,7 +155,7 @@ class _HomeState extends State<Home> {
                       print('Hello from Add Task');
                     },
                     child: Container(
-                      width: screenWidth * 0.16,
+                      width: screenWidth * 0.2,
                       height: screenHeight * 0.025,
                       child: Text(
                         'Add Task',
@@ -338,13 +338,16 @@ class _HomeState extends State<Home> {
                 padding: EdgeInsets.only(top: screenHeight * 0.03),
                 child: Image(image: AssetImage(imagePath)),
               ),
+              SizedBox(
+                height: screenHeight * 0.005,
+              ),
               Divider(
                 indent: screenWidth / 45,
                 endIndent: screenWidth / 45,
                 thickness: screenWidth * 0.005,
                 color: Color.fromRGBO(255, 255, 255, 0.9),
               ),
-              SizedBox(height: screenHeight * 0.01),
+              SizedBox(height: screenHeight * 0.005),
               Center(
                 child: Text(
                   title,
