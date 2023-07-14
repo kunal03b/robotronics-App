@@ -9,6 +9,10 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:robotronics/constants.dart';
 import 'package:robotronics/projects.dart';
 import 'package:robotronics/reusable.dart';
+// import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:vibration/vibration.dart';
+
+import 'home.dart';
 
 class addProject extends StatefulWidget {
   const addProject({Key? key}) : super(key: key);
@@ -31,30 +35,36 @@ class _addProjectState extends State<addProject> {
     final String title = _ProjectTitleController.text;
     final String description = _ProjectDescriptionController.text;
 
-    // Upload thumbnail image to Firebase Storage if available
-    String? thumbnailUrl;
+    if (title.isEmpty || description.isEmpty) {
+      Vibration.vibrate();
+      Fluttertoast.showToast(
+        msg: 'Please fill Title & Description of the project',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black87,
+        textColor: Colors.white,
+      );
+      return;
+    }
+
+    Map<String, String>? thumbnailData;
     if (_thumbnailImage != null) {
-      thumbnailUrl = await _uploadImageToFirebase(_thumbnailImage!);
+      thumbnailData = await _uploadImageToFirebase(_thumbnailImage!);
     }
 
-    // Upload cover photo image to Firebase Storage if available
-    String? coverPhotoUrl;
+    Map<String, String>? coverPhotoData;
     if (_coverPhotoImage != null) {
-      coverPhotoUrl = await _uploadImageToFirebase(_coverPhotoImage!);
+      coverPhotoData = await _uploadImageToFirebase(_coverPhotoImage!);
     }
 
-    // Add task data to Firebase Firestore
     await FirebaseFirestore.instance.collection('Project').add({
       'title': title,
       'description': description,
-      'thumbnailUrl': thumbnailUrl,
-      'coverPhotoUrl': coverPhotoUrl,
+      'thumbnailUrl': thumbnailData?['url'],
+      'thumbnailName': thumbnailData?['name'],
+      'coverPhotoUrl': coverPhotoData?['url'],
+      'coverPhotoName': coverPhotoData?['name'],
     });
-
-    _ProjectTitleController.clear();
-    _ProjectDescriptionController.clear();
-    _thumbnailImage = null;
-    _coverPhotoImage = null;
 
     Fluttertoast.showToast(
       msg: 'Task submitted successfully!',
@@ -66,11 +76,11 @@ class _addProjectState extends State<addProject> {
 
     Navigator.pop(
       context,
-      MaterialPageRoute(builder: (context) => projects()),
+      MaterialPageRoute(builder: (context) => Projects()),
     );
   }
 
-  Future<String> _uploadImageToFirebase(File image) async {
+  Future<Map<String, String>> _uploadImageToFirebase(File image) async {
     final firebaseStorageRef = firebase_storage.FirebaseStorage.instance
         .ref()
         .child('project_images')
@@ -80,7 +90,10 @@ class _addProjectState extends State<addProject> {
     final snapshot = await uploadTask.whenComplete(() {});
     final imageUrl = await snapshot.ref.getDownloadURL();
 
-    return imageUrl;
+    return {
+      'url': imageUrl,
+      'name': firebaseStorageRef.name,
+    };
   }
 
   Future<void> _pickThumbnailImage() async {
@@ -125,7 +138,8 @@ class _addProjectState extends State<addProject> {
         ),
       ),
       backgroundColor: Constants().buttonBackground,
-      appBar: appBarMethod(screenHeight, appBarIconSize, avatarRadius),
+      appBar: appBarMethod2(
+          context, screenHeight, appBarIconSize, avatarRadius, Projects()),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 8, right: 8),
@@ -267,54 +281,54 @@ class _addProjectState extends State<addProject> {
               SizedBox(
                 height: screenHeight * 0.008,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    ViewTaskTile(
-                      screenHeight: screenHeight,
-                      screenWidth: screenWidth,
-                      imagePath: 'assets/repository.png',
-                      text: 'Repository',
-                      onTap: () {},
-                      linkUrl: 'https://github.com/kunal03b/robotronics-App',
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.037,
-                    ),
-                    ViewTaskTile(
-                      screenHeight: screenHeight,
-                      screenWidth: screenWidth,
-                      imagePath: 'assets/powerpoint.png',
-                      text: 'PowerPoint',
-                      onTap: () {},
-                      linkUrl: '',
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.037,
-                    ),
-                    ViewTaskTile(
-                      screenHeight: screenHeight,
-                      screenWidth: screenWidth,
-                      imagePath: 'assets/word.png',
-                      text: 'Project Report',
-                      onTap: () {},
-                      linkUrl: '',
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.037,
-                    ),
-                    ViewTaskTile(
-                      screenHeight: screenHeight,
-                      screenWidth: screenWidth,
-                      imagePath: 'assets/ui.png',
-                      text: 'UI Design',
-                      onTap: () {},
-                      linkUrl: '',
-                    ),
-                  ],
-                ),
-              ),
+              // SingleChildScrollView(
+              //   scrollDirection: Axis.horizontal,
+              //   child: Row(
+              //     children: [
+              //       ViewTaskTile(
+              //         screenHeight: screenHeight,
+              //         screenWidth: screenWidth,
+              //         imagePath: 'assets/repository.png',
+              //         text: 'Repository',
+              //         onTap: () {},
+              //         linkUrl: 'https://github.com/kunal03b/robotronics-App',
+              //       ),
+              //       SizedBox(
+              //         width: screenWidth * 0.037,
+              //       ),
+              //       ViewTaskTile(
+              //         screenHeight: screenHeight,
+              //         screenWidth: screenWidth,
+              //         imagePath: 'assets/powerpoint.png',
+              //         text: 'PowerPoint',
+              //         onTap: () {},
+              //         linkUrl: '',
+              //       ),
+              //       SizedBox(
+              //         width: screenWidth * 0.037,
+              //       ),
+              //       ViewTaskTile(
+              //         screenHeight: screenHeight,
+              //         screenWidth: screenWidth,
+              //         imagePath: 'assets/word.png',
+              //         text: 'Project Report',
+              //         onTap: () {},
+              //         linkUrl: '',
+              //       ),
+              //       SizedBox(
+              //         width: screenWidth * 0.037,
+              //       ),
+              //       ViewTaskTile(
+              //         screenHeight: screenHeight,
+              //         screenWidth: screenWidth,
+              //         imagePath: 'assets/ui.png',
+              //         text: 'UI Design',
+              //         onTap: () {},
+              //         linkUrl: '',
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: screenHeight * 0.02,
               ),
@@ -356,7 +370,6 @@ class _addProjectState extends State<addProject> {
                       screenWidth: screenWidth,
                       imagePath: 'assets/docs.png',
                       text: 'Docs File',
-                      // ervice cloud.firestore { match /databases/{database}/documents { match /{document=**} { allow read, write; } } }
                       onTap: () {},
                       linkUrl: '',
                     ),

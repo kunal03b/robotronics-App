@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:robotronics/constants.dart';
-import 'package:robotronics/reusable.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:robotronics/constants.dart';
+import 'package:robotronics/home.dart';
+import 'package:robotronics/reusable.dart';
 
 class NewTask extends StatefulWidget {
   @override
   _NewTaskState createState() => _NewTaskState();
 }
 
-//malta == love
 class _NewTaskState extends State<NewTask> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -76,16 +76,13 @@ class _NewTaskState extends State<NewTask> {
   }
 
   Future<void> saveDataToFirebase(String firebaseLink) async {
-    // Get a reference to the Firebase collection
     final CollectionReference taskCollection = firestore.collection('task');
 
-    // Create a map with the data to be saved
     Map<String, dynamic> taskData = {
       'firebaseLink': firebaseLink,
     };
 
     try {
-      // Add the task data to Firebase
       await taskCollection.add(taskData);
       print('Data saved to Firebase successfully!');
     } catch (error) {
@@ -110,8 +107,6 @@ class _NewTaskState extends State<NewTask> {
     String cdate = DateFormat("yyyy-MM-dd").format(DateTime.now());
     print(cdate);
 
-    // selectedMembers = List<bool>.filled(availableMembers.length, false);
-
     Future<void> updateAssignedDate(String taskId) async {
       final DateTime currentDate = DateTime.now();
       final String formattedDate = DateFormat('dd/MM/yyyy').format(currentDate);
@@ -128,6 +123,14 @@ class _NewTaskState extends State<NewTask> {
     }
 
     Future<void> addTask() async {
+      if (titleController.text.isEmpty ||
+          descriptionController.text.isEmpty ||
+          selectedDate.isEmpty ||
+          selectedCategory == null) {
+        Fluttertoast.showToast(msg: 'Please fill in all the required fields');
+        return;
+      }
+
       CollectionReference taskCollection = firestore.collection('task');
 
       Map<String, dynamic> taskData = {
@@ -145,6 +148,8 @@ class _NewTaskState extends State<NewTask> {
         print('Task added successfully!');
         await updateAssignedMembers(taskId, getSelectedMembers());
         await updateAssignedDate(taskId);
+
+        Fluttertoast.showToast(msg: 'Task Saved');
       } catch (error) {
         print('Failed to add task: $error');
       }
@@ -153,10 +158,18 @@ class _NewTaskState extends State<NewTask> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          addTask()
-              .then((value) => {Fluttertoast.showToast(msg: 'Task Saved')});
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => NewTask()));
+          if (titleController.text.isEmpty ||
+              descriptionController.text.isEmpty ||
+              selectedDate.isEmpty ||
+              selectedCategory == null) {
+            Fluttertoast.showToast(
+                msg: 'Please fill in all the required fields');
+          } else {
+            addTask().then((value) {
+              Fluttertoast.showToast(msg: 'Task Saved');
+              Navigator.pop(context, Home());
+            });
+          }
         },
         backgroundColor: Constants().textColor,
         child: Icon(
@@ -201,7 +214,6 @@ class _NewTaskState extends State<NewTask> {
                   labelStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
-                    // fontWeight: FontWeight.bold,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
@@ -242,10 +254,6 @@ class _NewTaskState extends State<NewTask> {
                                     color: isSelected
                                         ? Constants().tileColor
                                         : null,
-                                    // border: Border.all(
-                                    //   color: Colors.grey,
-                                    //   // width: 1.0,
-                                    // ),
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Row(
                                   children: [
@@ -312,7 +320,6 @@ class _NewTaskState extends State<NewTask> {
                 child: Container(
                     width: screenWidth * 0.4,
                     height: screenHeight * 0.05,
-                    // color: Color.fromRGBO(217, 217, 217, 0.41),
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(217, 217, 217, 0.41),
                       borderRadius: BorderRadius.circular(16),

@@ -60,24 +60,27 @@ class _TaskCardWidgetState extends State<TaskCardWidget> {
                 ),
               ),
               SizedBox(height: widget.screenHeight * 0.015),
-              Row(
-                children: [
-                  for (int i = 0;
-                      i < widget.task['assignedMembers'].length;
-                      i++)
-                    Padding(
-                      padding:
-                          EdgeInsets.only(right: widget.screenWidth * 0.02),
-                      child: CircleAvatar(
-                        backgroundColor: Colors.grey.shade900,
-                        radius: widget.screenWidth * 0.042,
-                        child: Text(
-                          widget.task['assignedMembers'][i][0],
-                          style: TextStyle(fontSize: 16, color: Colors.white),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (int i = 0;
+                        i < widget.task['assignedMembers'].length;
+                        i++)
+                      Padding(
+                        padding:
+                            EdgeInsets.only(right: widget.screenWidth * 0.02),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey.shade900,
+                          radius: widget.screenWidth * 0.042,
+                          child: Text(
+                            widget.task['assignedMembers'][i][0],
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
               SizedBox(height: widget.screenHeight * 0.015),
               Row(

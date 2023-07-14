@@ -256,7 +256,7 @@ class _HomeState extends State<Home> {
                     onTap: () {
                       print('Hello from PREVIOUS PROJECTS');
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => projects()));
+                          MaterialPageRoute(builder: (context) => Projects()));
                     },
                     child: Container(
                       width: screenWidth * 0.16,
