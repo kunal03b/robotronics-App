@@ -48,7 +48,7 @@ class _ViewTaskState extends State<ViewTask> {
           backgroundColor: Constants().buttonBackground,
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(left: 11.0),
+              padding: EdgeInsets.only(left: 11.0, right: screenWidth * 0.06),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -72,6 +72,7 @@ class _ViewTaskState extends State<ViewTask> {
                     description,
                     style:
                         TextStyle(color: Constants().textColor, fontSize: 16),
+                    textAlign: TextAlign.justify,
                   ),
                   SizedBox(
                     height: screenHeight * 0.02,

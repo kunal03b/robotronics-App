@@ -174,7 +174,7 @@ class _ViewTaskTileState extends State<ViewTaskTile> {
       onTap: () => _launchUrl(widget.linkUrl),
       child: Container(
         height: widget.screenHeight * 0.13,
-        width: widget.screenWidth * 0.241,
+        width: widget.screenWidth * 0.243,
         decoration: BoxDecoration(
           color: Constants().container,
           borderRadius: BorderRadius.circular(14),
@@ -249,4 +249,38 @@ class _ExpandableContainerState extends State<ExpandableContainer> {
       ],
     );
   }
+}
+
+AppBar appBarMethod2(
+  BuildContext context,
+  screenHeight,
+  double appBarIconSize,
+  double avatarRadius,
+  Widget backButtonDestination,
+) {
+  return AppBar(
+    elevation: 0,
+    backgroundColor: Color.fromRGBO(32, 38, 46, 1),
+    toolbarHeight: screenHeight * 0.12,
+    leading: IconButton(
+      onPressed: () {
+        Navigator.pop(context, backButtonDestination);
+      },
+      icon: Icon(
+        Icons.arrow_back_rounded,
+        color: Color.fromRGBO(217, 217, 217, 1),
+        size: appBarIconSize,
+      ),
+    ),
+    actions: [
+      IconButton(
+        onPressed: () {},
+        icon: CircleAvatar(
+          backgroundColor: Colors.grey.shade100,
+          backgroundImage: AssetImage('assets/Me.jpg'),
+          radius: avatarRadius,
+        ),
+      ),
+    ],
+  );
 }

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:robotronics/addProject.dart';
+import 'package:robotronics/home.dart';
 import 'package:robotronics/reusable.dart';
+import 'package:robotronics/viewProjectDetail.dart';
 
 import 'constants.dart';
 
-class projects extends StatefulWidget {
-  const projects({Key? key});
+class Projects extends StatefulWidget {
+  const Projects({Key? key});
 
   @override
-  State<projects> createState() => _projectsState();
+  State<Projects> createState() => _ProjectsState();
 }
 
-class _projectsState extends State<projects> {
+class _ProjectsState extends State<Projects> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -21,7 +24,13 @@ class _projectsState extends State<projects> {
     final double appBarIconSize = screenWidth * 0.13;
 
     return Scaffold(
-      appBar: appBarMethod(screenHeight, appBarIconSize, avatarRadius),
+      appBar: appBarMethod2(
+        context,
+        screenHeight,
+        appBarIconSize,
+        avatarRadius,
+        Home(),
+      ),
       backgroundColor: Constants().buttonBackground,
       body: Column(
         children: [
@@ -44,8 +53,10 @@ class _projectsState extends State<projects> {
                 child: InkWell(
                   onTap: () {
                     print('Hello from Add Project');
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => addProject()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => addProject()),
+                    );
                   },
                   child: Container(
                     width: screenWidth * 0.2,
@@ -54,7 +65,9 @@ class _projectsState extends State<projects> {
                       child: Text(
                         'Add Project',
                         style: TextStyle(
-                            color: Constants().textColor, fontSize: 11),
+                          color: Constants().textColor,
+                          fontSize: 11,
+                        ),
                       ),
                     ),
                   ),
@@ -107,9 +120,11 @@ class _projectsState extends State<projects> {
                     itemBuilder: (context, index) {
                       final project =
                           projectDocs[index].data() as Map<String, dynamic>;
+                      final projectId = projectDocs[index].id;
                       final title = project['title'] ?? '';
                       final description = project['description'] ?? '';
                       final imageURL = project['imageURL'] ?? '';
+                      final coverPhotoUrl = project['coverPhotoUrl'] ?? '';
 
                       final isEvenIndex = index % 2 == 0;
                       final backgroundColor = isEvenIndex
@@ -126,89 +141,137 @@ class _projectsState extends State<projects> {
 
                       return Padding(
                         padding: EdgeInsets.only(bottom: screenHeight * 0.025),
-                        child: Container(
-                          // color: backgroundColor,
-                          width: screenWidth * 0.867,
-                          height: screenHeight * 0.173,
-                          decoration: BoxDecoration(
-                            color: backgroundColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  left: screenWidth * 0.05,
-                                  top: screenHeight * 0.015,
-                                ),
-                                child: Container(
-                                  width: screenWidth * 0.52,
-                                  height: screenHeight / 5.5,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        title.toUpperCase(),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ViewProjectDetail(projectId: projectId),
+                              ),
+                            );
+                            print("Know More Clicked");
+                          },
+                          child: Container(
+                            width: screenWidth * 0.867,
+                            height: screenHeight * 0.173,
+                            decoration: BoxDecoration(
+                              color: backgroundColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: screenWidth * 0.05,
+                                    top: screenHeight * 0.015,
+                                  ),
+                                  child: Container(
+                                    width: screenWidth * 0.52,
+                                    height: screenHeight / 5.5,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // FittedBox(
+                                        //   child:
+                                        Text(
+                                          title.toUpperCase(),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
                                             fontSize: 25,
                                             fontWeight: FontWeight.w900,
-                                            color: titleColor),
-                                      ),
-                                      SizedBox(
-                                        height: screenHeight * 0.002,
-                                      ),
-                                      Text(
-                                        description,
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w100,
-                                            fontSize: 10,
-                                            color: descColor),
-                                      ),
-                                      SizedBox(
-                                        height: screenHeight * 0.045,
-                                      ),
-                                      Container(
-                                        width: screenWidth * 0.28,
-                                        height: screenHeight * 0.037,
-                                        decoration: BoxDecoration(
-                                          color: Constants().buttonBackground,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
+                                            color: titleColor,
+                                          ),
                                         ),
-                                        child: Center(
-                                          child: Text(
-                                            "Know More",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Constants().textColor,
-                                              fontWeight: FontWeight.w600,
+                                        // ),
+                                        SizedBox(
+                                          height: screenHeight * 0.002,
+                                        ),
+                                        Text(
+                                          description,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 3,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w200,
+                                            fontSize: 10,
+                                            color: descColor,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: screenHeight * 0.045,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ViewProjectDetail(
+                                                        projectId: projectId),
+                                              ),
+                                            );
+                                            print("Know More Clicked");
+                                          },
+                                          child: Container(
+                                            width: screenWidth * 0.28,
+                                            height: screenHeight * 0.037,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Constants().buttonBackground,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Know More",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Constants().textColor,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsets.only(right: screenWidth * 0.05),
-                                child: Container(
-                                  width: screenWidth * 0.22,
-                                  height: screenHeight * 0.136,
-                                  child: Image.asset(
-                                    "assets/project.png",
-                                    fit: BoxFit.cover,
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      right: screenWidth * 0.05),
+                                  child: Container(
+                                    width: screenWidth * 0.22,
+                                    height: screenHeight * 0.136,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        coverPhotoUrl.isNotEmpty
+                                            ? FadeInImage.assetNetwork(
+                                                placeholder:
+                                                    'assets/placeholder_image.png',
+                                                image: coverPhotoUrl,
+                                                width: double.maxFinite,
+                                                height: double.maxFinite,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : SizedBox.shrink(),
+                                        if (coverPhotoUrl.isEmpty)
+                                          // Center(
+                                          // child:
+                                          CircularProgressIndicator(),
+                                        // ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       );
