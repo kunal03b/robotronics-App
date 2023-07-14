@@ -251,21 +251,17 @@ class _ProjectsState extends State<Projects> {
                                     ),
                                     child: Stack(
                                       children: [
-                                        coverPhotoUrl.isNotEmpty
-                                            ? FadeInImage.assetNetwork(
-                                                placeholder:
-                                                    'assets/placeholder_image.png',
-                                                image: coverPhotoUrl,
-                                                width: double.maxFinite,
-                                                height: double.maxFinite,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : SizedBox.shrink(),
+                                        if (coverPhotoUrl.isNotEmpty)
+                                          Image.network(
+                                            coverPhotoUrl,
+                                            width: double.maxFinite,
+                                            height: double.maxFinite,
+                                            fit: BoxFit.cover,
+                                          ),
                                         if (coverPhotoUrl.isEmpty)
-                                          // Center(
-                                          // child:
-                                          CircularProgressIndicator(),
-                                        // ),
+                                          Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
                                       ],
                                     ),
                                   ),
