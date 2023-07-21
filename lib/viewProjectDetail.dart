@@ -56,7 +56,7 @@ class _ViewProjectDetailState extends State<ViewProjectDetail> {
         children: [
           Container(
             width: screenWidth * 1,
-            height: screenHeight * 0.25,
+            height: screenHeight * 0.2535,
             color: Constants().tileColor,
             child: Stack(
               children: [

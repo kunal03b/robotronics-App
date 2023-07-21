@@ -172,9 +172,13 @@ class _NewTaskState extends State<NewTask> {
           }
         },
         backgroundColor: Constants().textColor,
-        child: Icon(
-          Icons.save,
-          color: Constants().buttonBackground,
+        child: Container(
+          width: screenWidth * 0.1,
+          height: screenHeight * 0.05,
+          child: Image.asset(
+            'assets/folder.png',
+            color: Constants().buttonBackground,
+          ),
         ),
       ),
       backgroundColor: Constants().buttonBackground,

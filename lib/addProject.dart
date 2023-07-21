@@ -132,9 +132,16 @@ class _addProjectState extends State<addProject> {
           _submitTask();
         },
         backgroundColor: Constants().textColor,
-        child: Icon(
-          Icons.arrow_forward_ios_outlined,
-          color: Constants().buttonBackground,
+        child:
+            //  Icon(
+            //   Icons.save,
+            Container(
+          width: screenWidth * 0.1,
+          height: screenHeight * 0.05,
+          child: Image.asset(
+            'assets/folder.png',
+            color: Constants().buttonBackground,
+          ),
         ),
       ),
       backgroundColor: Constants().buttonBackground,

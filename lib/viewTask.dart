@@ -78,7 +78,89 @@ class _ViewTaskState extends State<ViewTask> {
                     height: screenHeight * 0.02,
                   ),
 
+                  Text(
+                    'Assigned Members',
+                    style: TextStyle(
+                        color: Constants().textColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+
+                  SizedBox(
+                    height: screenHeight * 0.01,
+                  ),
+
                   // Row()
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     SingleChildScrollView(
+                  //       scrollDirection: Axis.horizontal,
+                  //       child: Row(
+                  //         children: [
+                  //           for (int i = 0;
+                  //               i < taskData['assignedMembers'].length;
+                  //               i++)
+                  //             Padding(
+                  //               padding:
+                  //                   EdgeInsets.only(right: screenWidth * 0.02),
+                  //               child: CircleAvatar(
+                  //                 backgroundColor: Constants().textColor,
+                  //                 radius: screenWidth * 0.042,
+                  //                 child: Text(taskData['assignedMembers'][i][0],
+                  //                     style: TextStyle(
+                  //                         fontSize: 16,
+                  //                         color: Constants().buttonBackground,
+                  //                         fontWeight: FontWeight.bold)),
+                  //               ),
+                  //             ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //     Row(
+                  //       children: [
+                  //         for (int i = 0;
+                  //             i < taskData['assignedMembers'].length;
+                  //             i++)
+                  //           Text(
+                  //             taskData['assignedMembers'][i],
+                  //             style: TextStyle(color: Colors.white),
+                  //           ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
+
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        for (int i = 0;
+                            i < taskData['assignedMembers'].length;
+                            i++)
+                          Padding(
+                            padding: EdgeInsets.only(right: screenWidth * 0.02),
+                            child: Container(
+                              height: screenHeight * 0.023,
+                              width: screenWidth * 0.23,
+                              decoration: BoxDecoration(
+                                  color: Constants().textColor,
+                                  borderRadius: BorderRadius.circular(4.5)),
+                              child: Center(
+                                child: Text(
+                                  // overflow: TextOverflow.ellipsis,
+                                  taskData['assignedMembers'][i],
+                                  style: TextStyle(
+                                      color: Constants().buttonBackground,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
 
                   SizedBox(
                     height: screenHeight * 0.02,

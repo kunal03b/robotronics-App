@@ -261,7 +261,7 @@ AppBar appBarMethod2(
   return AppBar(
     elevation: 0,
     backgroundColor: Color.fromRGBO(32, 38, 46, 1),
-    toolbarHeight: screenHeight * 0.12,
+    toolbarHeight: screenHeight * 0.09,
     leading: IconButton(
       onPressed: () {
         Navigator.pop(context, backButtonDestination);

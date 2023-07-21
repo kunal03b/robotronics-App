@@ -5,7 +5,6 @@ import 'package:robotronics/addProject.dart';
 import 'package:robotronics/home.dart';
 import 'package:robotronics/reusable.dart';
 import 'package:robotronics/viewProjectDetail.dart';
-
 import 'constants.dart';
 
 class Projects extends StatefulWidget {
@@ -38,7 +37,8 @@ class _ProjectsState extends State<Projects> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: screenWidth * 0.03),
+                padding: EdgeInsets.only(
+                    left: screenWidth * 0.03, top: screenHeight * 0.01),
                 child: Text(
                   'PREVIOUS PROJECTS',
                   style: TextStyle(

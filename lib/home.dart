@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
                   Padding(
                     padding: EdgeInsets.only(left: screenWidth * 0.03),
                     child: Text(
-                      'UPCOMING EVENTS',
+                      'Announcements',
                       style: TextStyle(
                           color: Constants().textColor,
                           fontSize: screenWidth * 0.05,
